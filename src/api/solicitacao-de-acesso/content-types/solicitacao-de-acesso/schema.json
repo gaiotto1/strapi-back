@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "solicitacoes_de_acesso",
+  "info": {
+    "singularName": "solicitacao-de-acesso",
+    "pluralName": "solicitacoes-de-acesso",
+    "displayName": "Solicitação de acesso"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nome": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "tipo_de_acesso": {
+      "type": "integer",
+      "required": true
+    }
+  }
+}
