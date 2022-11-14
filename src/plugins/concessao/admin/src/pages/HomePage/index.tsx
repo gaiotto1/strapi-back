@@ -51,7 +51,18 @@ const HomePage: React.VoidFunctionComponent = () => {
 
   const getTiposAcesso = async () => {
     try {
-      const { data } = await axios.get('http://localhost:1337/tipos-acesso');
+
+      const token = localStorage.getItem('jwtToken');
+      const tokenFormatado = token?.replace(/['"]+/g, '');
+
+      const { data } = await axios.get(
+        'http://localhost:1337/solicitacoes-de-acesso/tiposDeAcesso',
+        {
+          headers: {
+            'Authorization': `Bearer ${tokenFormatado}`
+          }
+        }
+        );
 
       const options = data.results.map((item) => {
         return {
@@ -70,16 +81,16 @@ const HomePage: React.VoidFunctionComponent = () => {
 
   const getUsers = async () => {
 
-    const token = sessionStorage.getItem('jwtToken');
+    // const token = sessionStorage.getItem('jwtToken');
 
-    const response = await fetch('http://localhost:8000/users', {
-      method: 'GET',
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
+    // const response = await fetch('http://localhost:8000/users', {
+    //   method: 'GET',
+    //   headers: {
+    //     authorization: `Bearer ${token}`,
+    //   },
+    // });
 
-    const users = [
+    /* const users = [
       { id: 1, nome: 'Joselito da Silva', email: 'joselitodasilva@outlook.com'},
       { id: 2, nome: 'João', email: 'joao@gmail.com.br'},
       { id: 3, nome: 'Maria 2', email: 'maria@gmail.com.br'},
@@ -98,7 +109,7 @@ const HomePage: React.VoidFunctionComponent = () => {
       { id: 16, nome: 'Marta 15', email: 'marta@gmail.com.br'}
     ]
 
-    setUsuarios(users);
+    setUsuarios(users); */
   };
 
   const handleRemove = (id, action) => {
@@ -128,6 +139,7 @@ const HomePage: React.VoidFunctionComponent = () => {
   };
 
   useEffect(() => {
+    getTiposAcesso();
     getUsers();
   }, []);
 
