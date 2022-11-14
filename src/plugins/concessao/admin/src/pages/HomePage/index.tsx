@@ -28,12 +28,13 @@ const HomePage: React.VoidFunctionComponent = () => {
   const [usuarios, setUsuarios] = useState<usuariosState[]>([]);
   const [messageAlert, setMessageAlert] = useState('teste de mensagem');
   const [enableAlert, setEnableAlert] = useState(false);
+  const [options, setOptions] = useState([]);
 
 
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo') || '{}');
   console.info('userInfo', userInfo);
 
-  const options = [
+  /* const options = [
     { value: 'agencia', label: 'Agência' },
     { value: 'compras', label: 'Compras' },
     { value: 'fornecedor', label: 'Fornecedor' },
@@ -41,15 +42,34 @@ const HomePage: React.VoidFunctionComponent = () => {
     { value: 'internocorporativo', label: 'Interno corporativo' },
     { value: 'revenda', label: 'Revenda' },
     { value: 'tradecorporativo', label: 'Trade corporativo' },
-  ];
+  ]; */
 
 
   const handleChange = (e) => {
     console.log(e);
   };
 
+  const getTiposAcesso = async () => {
+    try {
+      const { data } = await axios.get('http://localhost:1337/tipos-acesso');
+
+      const options = data.results.map((item) => {
+        return {
+          value: item.id,
+          label: item.nome,
+        };
+      });
+
+      setOptions(options);
+
+    } catch {
+      setOptions([]);
+    }
+  };
+
+
   const getUsers = async () => {
-    /*
+
     const token = sessionStorage.getItem('jwtToken');
 
     const response = await fetch('http://localhost:8000/users', {
@@ -57,7 +77,7 @@ const HomePage: React.VoidFunctionComponent = () => {
       headers: {
         authorization: `Bearer ${token}`,
       },
-    }); */
+    });
 
     const users = [
       { id: 1, nome: 'Joselito da Silva', email: 'joselitodasilva@outlook.com'},
