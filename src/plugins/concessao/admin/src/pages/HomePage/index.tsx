@@ -30,7 +30,10 @@ type optionsState = {
 const HomePage: React.VoidFunctionComponent = () => {
   const history = useHistory();
   const [usuarios, setUsuarios] = useState<usuariosState[]>([]);
-  const [messageAlert, setMessageAlert] = useState('teste de mensagem');
+  const [messageAlert, setMessageAlert] = useState({
+    message: '',
+    type: 'success',
+  });
   const [enableAlert, setEnableAlert] = useState(false);
   const [options, setOptions] = useState<optionsState[]>([]);
 
@@ -90,9 +93,17 @@ const HomePage: React.VoidFunctionComponent = () => {
     setUsuarios(newUsuarios);
 
     if (action === 'remove') {
-      setMessageAlert('Usuário reprovado');
+      setMessageAlert({
+        message: 'Usuário reprovado',
+        type: 'success',
+      });
     } else {
-      setMessageAlert('Usuário aprovado');
+      setMessageAlert(
+        {
+          message: 'Usuário aprovado',
+          type: 'success',
+        }
+      );
     }
 
     setEnableAlert(true);
@@ -112,8 +123,6 @@ const HomePage: React.VoidFunctionComponent = () => {
     getUsers();
   }, []);
 
-
-
   return (
     <div className="containerHome">
 
@@ -122,10 +131,10 @@ const HomePage: React.VoidFunctionComponent = () => {
           <Alert
             closeLabel="Close alert"
             title="Sucesso:"
-            variant="success"
+            variant={messageAlert.type}
             className="alert"
             onClose={() => setEnableAlert(false)}>
-            {messageAlert}
+            {messageAlert.message}
           </Alert>
         </div>
       )}
