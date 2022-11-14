@@ -1,12 +1,5 @@
-/*
- *
- * HomePage
- *
- */
-
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-// import pluginId from '../../pluginId';
 import axios from 'axios';
 
 import { Stack, Typography, Button, Icon, Alert } from '@strapi/design-system'
@@ -21,6 +14,17 @@ type usuariosState = {
   id: number;
   nome: string;
   email: string;
+  tipos_de_acesso: {
+    id: string;
+  }
+}
+
+type optionsState = {
+  value: string;
+  label: string;
+  tipos_de_acesso: {
+    id: string;
+  }
 }
 
 const HomePage: React.VoidFunctionComponent = () => {
@@ -28,22 +32,11 @@ const HomePage: React.VoidFunctionComponent = () => {
   const [usuarios, setUsuarios] = useState<usuariosState[]>([]);
   const [messageAlert, setMessageAlert] = useState('teste de mensagem');
   const [enableAlert, setEnableAlert] = useState(false);
-  const [options, setOptions] = useState([]);
-
+  const [options, setOptions] = useState<optionsState[]>([]);
 
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo') || '{}');
-  console.info('userInfo', userInfo);
-
-  /* const options = [
-    { value: 'agencia', label: 'Agência' },
-    { value: 'compras', label: 'Compras' },
-    { value: 'fornecedor', label: 'Fornecedor' },
-    { value: 'franquia', label: 'Franquia' },
-    { value: 'internocorporativo', label: 'Interno corporativo' },
-    { value: 'revenda', label: 'Revenda' },
-    { value: 'tradecorporativo', label: 'Trade corporativo' },
-  ]; */
-
+  const token = sessionStorage.getItem('jwtToken');
+  const tokenFormatado = token?.replace(/['"]+/g, '');
 
   const handleChange = (e) => {
     console.log(e);
@@ -51,10 +44,6 @@ const HomePage: React.VoidFunctionComponent = () => {
 
   const getTiposAcesso = async () => {
     try {
-
-      const token = localStorage.getItem('jwtToken');
-      const tokenFormatado = token?.replace(/['"]+/g, '');
-
       const { data } = await axios.get(
         'http://localhost:1337/solicitacoes-de-acesso/tiposDeAcesso',
         {
@@ -72,44 +61,26 @@ const HomePage: React.VoidFunctionComponent = () => {
       });
 
       setOptions(options);
-
     } catch {
       setOptions([]);
     }
   };
 
-
   const getUsers = async () => {
+    try {
+      const { data } = await axios.get(
+        'http://localhost:1337/solicitacoes-de-acesso/usuariosAguardandoAprovacao',
+        {
+          headers: {
+            'Authorization': `Bearer ${tokenFormatado}`
+          }
+        }
+      );
 
-    // const token = sessionStorage.getItem('jwtToken');
-
-    // const response = await fetch('http://localhost:8000/users', {
-    //   method: 'GET',
-    //   headers: {
-    //     authorization: `Bearer ${token}`,
-    //   },
-    // });
-
-    /* const users = [
-      { id: 1, nome: 'Joselito da Silva', email: 'joselitodasilva@outlook.com'},
-      { id: 2, nome: 'João', email: 'joao@gmail.com.br'},
-      { id: 3, nome: 'Maria 2', email: 'maria@gmail.com.br'},
-      { id: 4, nome: 'Marta 3', email: 'marta@gmail.com.br'},
-      { id: 5, nome: 'Marta 4', email: 'marta@gmail.com.br'},
-      { id: 6, nome: 'Marta 5', email: 'marta@gmail.com.br'},
-      { id: 7, nome: 'Marta 6', email: 'marta@gmail.com.br'},
-      { id: 8, nome: 'Marta 7', email: 'marta@gmail.com.br'},
-      { id: 9, nome: 'Marta 8', email: 'marta@gmail.com.br'},
-      { id: 10, nome: 'Marta 9', email: 'marta@gmail.com.br'},
-      { id: 11, nome: 'Marta 10', email: 'marta@gmail.com.br'},
-      { id: 12, nome: 'Marta 11', email: 'marta@gmail.com.br'},
-      { id: 13, nome: 'Marta 12', email: 'marta@gmail.com.br'},
-      { id: 14, nome: 'Marta 13', email: 'marta@gmail.com.br'},
-      { id: 15, nome: 'Marta 14', email: 'marta@gmail.com.br'},
-      { id: 16, nome: 'Marta 15', email: 'marta@gmail.com.br'}
-    ]
-
-    setUsuarios(users); */
+      setUsuarios(data);
+    } catch {
+      setUsuarios([]);
+    }
   };
 
   const handleRemove = (id, action) => {
@@ -130,8 +101,6 @@ const HomePage: React.VoidFunctionComponent = () => {
       setEnableAlert(false);
       clearTimeout(timer);
     }, 3000);
-
-
   };
 
   const handleNavigateUser = (id) => {
@@ -192,7 +161,11 @@ const HomePage: React.VoidFunctionComponent = () => {
 
                 <div className="ContainerTwo">
                   <div className="containerTwoIntern">
-                    <SelectPermissoes options={options} onChange={(e) => handleChange(e)} />
+                    <SelectPermissoes
+                      options={options}
+                      onChange={(e) => handleChange(e)}
+                      valueSelected={usuario?.tipos_de_acesso?.id}
+                    />
                   </div>
                 </div>
 
