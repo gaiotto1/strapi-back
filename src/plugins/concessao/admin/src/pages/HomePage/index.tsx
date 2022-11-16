@@ -37,8 +37,9 @@ const HomePage: React.VoidFunctionComponent = () => {
   const [enableAlert, setEnableAlert] = useState(false);
   const [options, setOptions] = useState<optionsState[]>([]);
 
-  const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
-  const token = localStorage.getItem('jwtToken');
+  const userInfoString = localStorage.getItem('userInfo') ? localStorage.getItem('userInfo') : sessionStorage.getItem('userInfo');
+  const userInfo = JSON.parse(userInfoString || '{}');
+  const token = localStorage.getItem('jwtToken') ? localStorage.getItem('jwtToken') : sessionStorage.getItem('jwtToken');
   const tokenFormatado = token?.replace(/['"]+/g, '');
 
   const handleChange = (idTypeAccess, idUser) => {
