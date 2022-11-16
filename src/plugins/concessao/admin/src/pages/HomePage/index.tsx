@@ -14,7 +14,7 @@ type usuariosState = {
   id: number;
   nome: string;
   email: string;
-  tipos_de_acesso: {
+  tipo_de_acesso: {
     id: string;
   }
 }
@@ -22,7 +22,7 @@ type usuariosState = {
 type optionsState = {
   value: string;
   label: string;
-  tipos_de_acesso: {
+  tipo_de_acesso: {
     id: string;
   }
 }
@@ -46,7 +46,7 @@ const HomePage: React.VoidFunctionComponent = () => {
       if (usuario.id === idTypeAccess.id) {
         return {
           ...usuario,
-          tipos_de_acesso: idTypeAccess.tipos_de_acesso,
+          tipo_de_acesso: idTypeAccess.tipo_de_acesso,
         };
       }
       return usuario;
@@ -217,7 +217,7 @@ const HomePage: React.VoidFunctionComponent = () => {
                     <SelectPermissoes
                       options={options}
                       onChange={(e) => handleChange(e.target.value)}
-                      valueSelected={usuario?.tipos_de_acesso?.id}
+                      valueSelected={usuario?.tipo_de_acesso?.id}
                     />
                   </div>
                 </div>
@@ -225,7 +225,7 @@ const HomePage: React.VoidFunctionComponent = () => {
                 <div className="containerThree">
                   <Button
                     variant="success-light"
-                    onClick={() => handleApprove(usuario?.id, usuario?.tipos_de_acesso?.id)}
+                    onClick={() => handleApprove(usuario?.id, usuario?.tipo_de_acesso?.id)}
                   >
                     <Icon color="secondary500" as={Check} />
                   </Button>
