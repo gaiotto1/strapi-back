@@ -232,7 +232,7 @@ const HomePage: React.VoidFunctionComponent = () => {
 
                   <Button
                     variant='danger-light'
-                    onClick={() => handleReprove(usuario?.id, 'remove')}
+                    onClick={() => handleReprove(usuario?.id, usuario?.tipo_de_acesso?.id)}
                   >
                     <Icon color="secondary500" as={Cross} />
                   </Button>
