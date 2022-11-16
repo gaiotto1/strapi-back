@@ -37,12 +37,22 @@ const HomePage: React.VoidFunctionComponent = () => {
   const [enableAlert, setEnableAlert] = useState(false);
   const [options, setOptions] = useState<optionsState[]>([]);
 
-  const userInfo = JSON.parse(sessionStorage.getItem('userInfo') || '{}');
-  const token = sessionStorage.getItem('jwtToken');
+  const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+  const token = localStorage.getItem('jwtToken');
   const tokenFormatado = token?.replace(/['"]+/g, '');
 
-  const handleChange = (e) => {
-    console.log(e);
+  const handleChange = (idTypeAccess) => {
+    const newUsuarios = usuarios.map((usuario) => {
+      if (usuario.id === idTypeAccess.id) {
+        return {
+          ...usuario,
+          tipos_de_acesso: idTypeAccess.tipos_de_acesso,
+        };
+      }
+      return usuario;
+    });
+
+    setUsuarios(newUsuarios);
   };
 
   const getTiposAcesso = async () => {
@@ -206,7 +216,7 @@ const HomePage: React.VoidFunctionComponent = () => {
                   <div className="containerTwoIntern">
                     <SelectPermissoes
                       options={options}
-                      onChange={(e) => handleChange(e)}
+                      onChange={(e) => handleChange(e.target.value)}
                       valueSelected={usuario?.tipos_de_acesso?.id}
                     />
                   </div>
