@@ -86,32 +86,66 @@ const HomePage: React.VoidFunctionComponent = () => {
     }
   };
 
-  const handleRemove = (id, action) => {
-    setEnableAlert(false);
+  const handleApprove = async (id: number, typeAccess: string) => {
+    try {
+      const { data } = await axios.post(
+        'http://localhost:1337/solicitacoes-de-acesso/aprovar',
+        {
+          usuario_id: id,
+          tipo_de_acesso_id: typeAccess,
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${tokenFormatado}`
+          }
+        }
+      );
 
-    const newUsuarios = usuarios.filter(usuario => usuario.id !== id);
-    setUsuarios(newUsuarios);
+      setMessageAlert({
+        message: 'Usuário aprovado',
+        type: 'success',
+      });
+      setEnableAlert(true);
 
-    if (action === 'remove') {
+      setUsuarios(data);
+    } catch {
+      setMessageAlert({
+        message: 'Falha ao aprovar usuário',
+        type: 'error',
+      });
+      setEnableAlert(true);
+    }
+  };
+
+  const handleReprove = async (id: number, typeAccess: string) => {
+    try {
+      const { data } = await axios.post(
+        'http://localhost:1337/solicitacoes-de-acesso/reprovar',
+        {
+          usuario_id: id,
+          tipo_de_acesso_id: typeAccess,
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${tokenFormatado}`
+          }
+        }
+      );
+
       setMessageAlert({
         message: 'Usuário reprovado',
         type: 'success',
       });
-    } else {
-      setMessageAlert(
-        {
-          message: 'Usuário aprovado',
-          type: 'success',
-        }
-      );
+      setEnableAlert(true);
+
+      setUsuarios(data);
+    } catch {
+      setMessageAlert({
+        message: 'Falha ao reprovar usuário',
+        type: 'error',
+      });
+      setEnableAlert(true);
     }
-
-    setEnableAlert(true);
-
-    const timer = setTimeout(() => {
-      setEnableAlert(false);
-      clearTimeout(timer);
-    }, 3000);
   };
 
   const handleNavigateUser = (id) => {
@@ -181,14 +215,14 @@ const HomePage: React.VoidFunctionComponent = () => {
                 <div className="containerThree">
                   <Button
                     variant="success-light"
-                    onClick={() => handleRemove(usuario?.id, 'add')}
+                    onClick={() => handleApprove(usuario?.id, usuario?.tipos_de_acesso?.id)}
                   >
                     <Icon color="secondary500" as={Check} />
                   </Button>
 
                   <Button
                     variant='danger-light'
-                    onClick={() => handleRemove(usuario?.id, 'remove')}
+                    onClick={() => handleReprove(usuario?.id, 'remove')}
                   >
                     <Icon color="secondary500" as={Cross} />
                   </Button>
