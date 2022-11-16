@@ -41,12 +41,16 @@ const HomePage: React.VoidFunctionComponent = () => {
   const token = localStorage.getItem('jwtToken');
   const tokenFormatado = token?.replace(/['"]+/g, '');
 
-  const handleChange = (idTypeAccess) => {
+  const handleChange = (idTypeAccess, idUser) => {
+    console.info('idTypeAccess', idTypeAccess);
     const newUsuarios = usuarios.map((usuario) => {
-      if (usuario.id === idTypeAccess.id) {
+      if (usuario.id === idUser) {
         return {
           ...usuario,
-          tipo_de_acesso: idTypeAccess.tipo_de_acesso,
+          tipo_de_acesso: {
+            ...usuario.tipo_de_acesso,
+            id: idTypeAccess,
+          }
         };
       }
       return usuario;
@@ -216,7 +220,7 @@ const HomePage: React.VoidFunctionComponent = () => {
                   <div className="containerTwoIntern">
                     <SelectPermissoes
                       options={options}
-                      onChange={(e) => handleChange(e.target.value)}
+                      onChange={(e) => handleChange(e.target.value, usuario.id)}
                       valueSelected={usuario?.tipo_de_acesso?.id}
                     />
                   </div>
