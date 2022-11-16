@@ -220,7 +220,7 @@ const HomePage: React.VoidFunctionComponent = () => {
                   <div className="containerTwoIntern">
                     <SelectPermissoes
                       options={options}
-                      onChange={(e) => handleChange(e.target.value, usuario.id)}
+                      onChange={(e) => handleChange(e, usuario.id)}
                       valueSelected={usuario?.tipo_de_acesso?.id}
                     />
                   </div>
