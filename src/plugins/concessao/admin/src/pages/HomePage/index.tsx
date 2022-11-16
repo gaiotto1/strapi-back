@@ -42,6 +42,8 @@ const HomePage: React.VoidFunctionComponent = () => {
   const token = localStorage.getItem('jwtToken') ? localStorage.getItem('jwtToken') : sessionStorage.getItem('jwtToken');
   const tokenFormatado = token?.replace(/['"]+/g, '');
 
+  const baseURL = `${process.env.PUBLIC_API_URL}/`;
+
   const handleChange = (idTypeAccess, idUser) => {
     console.info('idTypeAccess', idTypeAccess);
     const newUsuarios = usuarios.map((usuario) => {
@@ -63,7 +65,7 @@ const HomePage: React.VoidFunctionComponent = () => {
   const getTiposAcesso = async () => {
     try {
       const { data } = await axios.get(
-        'http://localhost:1337/solicitacoes-de-acesso/tiposDeAcesso',
+        `${baseURL}solicitacoes-de-acesso/tiposDeAcesso`,
         {
           headers: {
             'Authorization': `Bearer ${tokenFormatado}`
@@ -87,7 +89,7 @@ const HomePage: React.VoidFunctionComponent = () => {
   const getUsers = async () => {
     try {
       const { data } = await axios.get(
-        'http://localhost:1337/solicitacoes-de-acesso/usuariosAguardandoAprovacao',
+        `${baseURL}solicitacoes-de-acesso/usuariosAguardandoAprovacao`,
         {
           headers: {
             'Authorization': `Bearer ${tokenFormatado}`
@@ -104,7 +106,7 @@ const HomePage: React.VoidFunctionComponent = () => {
   const handleApprove = async (id: number, typeAccess: string) => {
     try {
       const { data } = await axios.post(
-        'http://localhost:1337/solicitacoes-de-acesso/aprovar',
+        `${baseURL}solicitacoes-de-acesso/aprovar`,
         {
           usuario_id: id,
           tipo_de_acesso_id: typeAccess,
@@ -135,7 +137,7 @@ const HomePage: React.VoidFunctionComponent = () => {
   const handleReprove = async (id: number, typeAccess: string) => {
     try {
       const { data } = await axios.post(
-        'http://localhost:1337/solicitacoes-de-acesso/reprovar',
+        `${baseURL}solicitacoes-de-acesso/reprovar`,
         {
           usuario_id: id,
           tipo_de_acesso_id: typeAccess,
