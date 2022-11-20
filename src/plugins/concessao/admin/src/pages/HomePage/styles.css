@@ -7,17 +7,12 @@
 .containerTable {
   width: 100%;
   max-width: 834px;
-  min-height: 404px;
   margin-top: 50px;
-  background-color: white;
   padding: 17px 15px;
-  border: 1px solid #DCDCE4;
-  box-shadow: 0px 1px 4px rgba(33, 33, 52, 0.1);
   border-radius: 4px;
 }
 
 .subtitle {
-  color: #666687;
   width: 100%;
   max-width: 725px;
   margin-top: 23px;

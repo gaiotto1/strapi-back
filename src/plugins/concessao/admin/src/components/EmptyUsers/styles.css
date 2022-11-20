@@ -1,9 +1,13 @@
 .containerEmpty {
-  height: 318px;
+  height: 268px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+}
+
+.containerEmpty div {
+  margin-bottom: 30px;
 }
 
 .containerSVG {

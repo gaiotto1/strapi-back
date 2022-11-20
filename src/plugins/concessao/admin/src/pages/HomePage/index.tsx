@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
-import { Stack, Typography, Button, Icon, Alert } from '@strapi/design-system'
+import { Stack, Typography, Button, Icon, Alert, Box } from '@strapi/design-system'
 import { Check, Cross } from '@strapi/icons';
 
 import SelectPermissoes from '../../components/SelectPermissoes';
@@ -42,7 +42,7 @@ const HomePage: React.VoidFunctionComponent = () => {
   const token = localStorage.getItem('jwtToken') ? localStorage.getItem('jwtToken') : sessionStorage.getItem('jwtToken');
   const tokenFormatado = token?.replace(/['"]+/g, '');
 
-  const baseURL = `${process.env.PUBLIC_API_URL}/`;
+  const baseURL = process.env.STRAPI_ADMIN_BACKEND_URL;
 
   const handleChange = (idTypeAccess, idUser) => {
     console.info('idTypeAccess', idTypeAccess);
@@ -65,7 +65,7 @@ const HomePage: React.VoidFunctionComponent = () => {
   const getTiposAcesso = async () => {
     try {
       const { data } = await axios.get(
-        `${baseURL}solicitacoes-de-acesso/tiposDeAcesso`,
+        `${baseURL}/solicitacoes-de-acesso/tiposDeAcesso`,
         {
           headers: {
             'Authorization': `Bearer ${tokenFormatado}`
@@ -89,7 +89,7 @@ const HomePage: React.VoidFunctionComponent = () => {
   const getUsers = async () => {
     try {
       const { data } = await axios.get(
-        `${baseURL}solicitacoes-de-acesso/usuariosAguardandoAprovacao`,
+        `${baseURL}/solicitacoes-de-acesso/usuariosAguardandoAprovacao`,
         {
           headers: {
             'Authorization': `Bearer ${tokenFormatado}`
@@ -98,6 +98,7 @@ const HomePage: React.VoidFunctionComponent = () => {
       );
 
       setUsuarios(data);
+      // setUsuarios(data.reverse());
     } catch {
       setUsuarios([]);
     }
@@ -106,7 +107,7 @@ const HomePage: React.VoidFunctionComponent = () => {
   const handleApprove = async (id: number, typeAccess: string) => {
     try {
       const { data } = await axios.post(
-        `${baseURL}solicitacoes-de-acesso/aprovar`,
+        `${baseURL}/solicitacoes-de-acesso/aprovar`,
         {
           usuario_id: id,
           tipo_de_acesso_id: typeAccess,
@@ -137,7 +138,7 @@ const HomePage: React.VoidFunctionComponent = () => {
   const handleReprove = async (id: number, typeAccess: string) => {
     try {
       const { data } = await axios.post(
-        `${baseURL}solicitacoes-de-acesso/reprovar`,
+        `${baseURL}/solicitacoes-de-acesso/reprovar`,
         {
           usuario_id: id,
           tipo_de_acesso_id: typeAccess,
@@ -195,11 +196,11 @@ const HomePage: React.VoidFunctionComponent = () => {
           Olá, {userInfo?.firstname} 👋
         </Typography>
 
-        <Typography variant="epsilon" className="subtitle">
+        <Typography variant="epsilon" className="subtitle" textColor="neutral500">
           Esse é o backoffice do Portal do Trade: todas as ferramentas necessárias para que o produto continue rodando.
         </Typography>
 
-        <div className="containerTable">
+        <Box className="containerTable" background="neutral0" shadow="tableShadow">
           <Typography variant="epsilon" fontWeight="semiBold" textColor="neutral800">
             Novas solicitações
           </Typography>
@@ -249,7 +250,7 @@ const HomePage: React.VoidFunctionComponent = () => {
           ) : (
             <EmptyUsers />
             )}
-        </div>
+        </Box>
       </Stack>
     </div>
   );
